@@ -12,7 +12,7 @@ app.use(express.json())
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.obhaluk.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 console.log(uri)
-const stripe = require("stripe")('sk_test_51ND8OoBH3R7X5Kq3UXjoo1uEEQkxNwCRIcPpHSxRVdCl8JuImncXNiTM51Br6uID8BT6qsGYWUUY9BOdqdyL8ePn00ADxaaKbr')
+const stripe = require("stripe")(process.env.SECRET_KEY)
 
 
 async function run() {
@@ -96,7 +96,27 @@ async function run() {
 }
 run().catch(console.dir)
 
+app.get('/products', async (req, res) => {
 
+    const cursor = productsCollection.find({})
+    const page = req.query.page;
+    const size = parseInt(req.query.size);
+    let products;
+    const count = await cursor.count();
+    if (page) {
+        products = await cursor.skip(page * size).limit(size).toArray();
+    }
+    else {
+        products = await cursor.toArray()
+    }
+
+
+
+
+    res.send({ count, products })
+    // const name="kakakf"
+    // res.send(name)
+})
 
 app.get('/', (req, res) => {
     res.send('shopping-zone');
