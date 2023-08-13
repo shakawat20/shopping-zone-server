@@ -17,7 +17,7 @@ const stripe = require("stripe")(process.env.SECRET_KEY)
 
 async function run() {
     try {
-        await client.connect()
+        client.connect()
         const database = client.db('online_shop')
         const productsCollection = database.collection('products')
         const orderCollection = database.collection('orders')
