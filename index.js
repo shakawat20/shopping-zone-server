@@ -50,25 +50,25 @@ async function run() {
 
 
         //GET Products API
-        app.get('/products', async (req, res) => {
+        // app.get('/products', async (req, res) => {
 
-            const cursor = await productsCollection.find({})
-            const page = req.query.page;
-            const size = parseInt(req.query.size);
-            let products;
-            const count = await cursor.count();
-            if (page) {
-                products = await cursor.skip(page * size).limit(size).toArray();
-            }
-            else {
-                products = await cursor.toArray()
-            }
+        //     const cursor = await productsCollection.find({})
+        //     const page = req.query.page;
+        //     const size = parseInt(req.query.size);
+        //     let products;
+        //     const count = await cursor.count();
+        //     if (page) {
+        //         products = await cursor.skip(page * size).limit(size).toArray();
+        //     }
+        //     else {
+        //         products = await cursor.toArray()
+        //     }
 
 
-            res.send({ count, products })
-            // const name="kakakf"
-            // res.send(name)
-        })
+        //     res.send({ count, products })
+        //     // const name="kakakf"
+        //     // res.send(name)
+        // })
 
         //Use POST to get data by keys
         app.post('/products/byKeys', async (req, res) => {
@@ -94,10 +94,28 @@ async function run() {
 }
 run().catch(console.dir)
 
+app.get('/products', async (req, res) => {
 
+    const cursor = await productsCollection.find({})
+    const page = req.query.page;
+    const size = parseInt(req.query.size);
+    let products;
+    const count = await cursor.count();
+    if (page) {
+        products = await cursor.skip(page * size).limit(size).toArray();
+    }
+    else {
+        products = await cursor.toArray()
+    }
+
+
+    res.send({ count, products })
+    // const name="kakakf"
+    // res.send(name)
+})
 
 app.get('/', (req, res) => {
-    res.send('hojoborol');
+    res.send('abar hojoborol');
 })
 
 app.listen(port, () => {
