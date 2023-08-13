@@ -65,8 +65,6 @@ async function run() {
             }
 
 
-
-
             res.send({ count, products })
             // const name="kakakf"
             // res.send(name)
@@ -99,7 +97,7 @@ run().catch(console.dir)
 
 
 app.get('/', (req, res) => {
-    res.send('shopping-zone');
+    res.send('hojoborol');
 })
 
 app.listen(port, () => {
