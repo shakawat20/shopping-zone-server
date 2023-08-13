@@ -52,7 +52,7 @@ async function run() {
         //GET Products API
         app.get('/products', async (req, res) => {
 
-            const cursor = productsCollection.find({})
+            const cursor = await productsCollection.find({})
             const page = req.query.page;
             const size = parseInt(req.query.size);
             let products;
@@ -96,27 +96,7 @@ async function run() {
 }
 run().catch(console.dir)
 
-app.get('/products', async (req, res) => {
 
-    const cursor =await productsCollection.find({})
-    const page = req.query.page;
-    const size = parseInt(req.query.size);
-    let products;
-    const count = await cursor.count();
-    if (page) {
-        products = await cursor.skip(page * size).limit(size).toArray();
-    }
-    else {
-        products = await cursor.toArray()
-    }
-
-
-
-
-    res.send({ count, products })
-    // const name="kakakf"
-    // res.send(name)
-})
 
 app.get('/', (req, res) => {
     res.send('shopping-zone');
