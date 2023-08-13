@@ -99,7 +99,7 @@ run().catch(console.dir)
 
 
 app.get('/', (req, res) => {
-    res.send('ema jon server is running');
+    res.send('shopping-zone');
 })
 
 app.listen(port, () => {
