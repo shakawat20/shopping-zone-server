@@ -98,7 +98,7 @@ run().catch(console.dir)
 
 app.get('/products', async (req, res) => {
 
-    const cursor = productsCollection.find({})
+    const cursor =await productsCollection.find({})
     const page = req.query.page;
     const size = parseInt(req.query.size);
     let products;
