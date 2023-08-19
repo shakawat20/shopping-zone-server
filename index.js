@@ -11,7 +11,7 @@ app.use(express.json())
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.obhaluk.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
-console.log(uri)
+
 const stripe = require("stripe")(process.env.SECRET_KEY)
 
 
@@ -26,7 +26,7 @@ async function run() {
 
         app.post("/create-payment-intent", async (req, res) => {
             const { amount } = req.body;
-            console.log(amount)
+            
             // Create a PaymentIntent with the order amount and currency
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: parseInt(amount),
@@ -37,7 +37,8 @@ async function run() {
                 },
 
             });
-            console.log(clientSecret)
+         console.log("asdklfa",amount)
+            
             res.send({
                 clientSecret: paymentIntent.client_secret,
             });
