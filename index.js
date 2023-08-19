@@ -26,30 +26,30 @@ async function run() {
 
         app.post("/create-payment-intent", async (req, res) => {
             const { amount } = req.body;
-
             console.log(amount)
-           
-
-
             // Create a PaymentIntent with the order amount and currency
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: parseInt(amount),
                 currency: "usd",
-              
+
                 automatic_payment_methods: {
                     enabled: true,
                 },
 
             });
-
+            console.log(clientSecret)
             res.send({
                 clientSecret: paymentIntent.client_secret,
             });
         });
 
 
+        // app.post("/orders", async (req, res) => {
 
-        
+        // })
+
+
+
         app.get('/products', async (req, res) => {
 
             const cursor = await productsCollection.find({})
@@ -78,6 +78,16 @@ async function run() {
             res.json(products)
         })
 
+
+        app.post('/inventory', async (req, res) => {
+            const product = req?.body
+            console.log(product)
+            const products = await productsCollection.insertOne(product)
+            console.log(products)
+
+            res.send(products)
+
+        })
         //Add Orders API
         app.post('/orders', async (req, res) => {
             const order = req.body;
