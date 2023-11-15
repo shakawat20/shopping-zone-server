@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb')
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
 require('dotenv').config()
 const cors = require('cors');
 
@@ -21,6 +21,7 @@ async function run() {
         const database = client.db('online_shop')
         const productsCollection = database.collection('products')
         const orderCollection = database.collection('orders')
+        const adminCollection=database.collection('admin')
 
 
 
@@ -37,7 +38,7 @@ async function run() {
                 },
 
             });
-         console.log("asdklfa",amount)
+       
             
             res.send({
                 clientSecret: paymentIntent.client_secret,
@@ -82,20 +83,66 @@ async function run() {
 
         app.post('/inventory', async (req, res) => {
             const product = req?.body
-            console.log(product)
+            
             const products = await productsCollection.insertOne(product)
-            console.log(products)
+           
 
             res.send(products)
 
         })
         //Add Orders API
-        app.post('/orders', async (req, res) => {
-            const order = req.body;
+        app.post('/order', async (req, res) => {
+            const order = req?.body;
             const result = await orderCollection.insertOne(order)
             res.json(result)
 
         })
+        app.post('/admin/:email',async(req,res)=>{
+            const email=req?.params?.email;
+            const admin= await adminCollection.insertOne(email)
+            res.json(admin)
+
+
+        })
+        app.get('/admin/:email',async(req,res)=>{
+            const email=req?.params?.email;
+          
+            const emailObject={email:email}
+         
+            const admin= await adminCollection.findOne(emailObject)
+       
+           
+            res.json(admin)
+
+
+        })
+        app.get('/orders',async(req,res)=>{
+
+            const orders=await orderCollection.find().toArray()
+
+            res.send(orders)
+
+        })
+
+
+        app.delete('/product/:id', async (req, res) => {
+            const id = req?.params?.id;
+            const product = { _id: new ObjectId(id) };
+            console.log(product)
+            const result = await productsCollection.deleteOne(product);
+            console.log(result)
+            res.send(result)
+        })
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req?.params?.id;
+            const order = { _id: new ObjectId(id) };
+          
+            const result = await orderCollection.deleteOne(order);
+          
+            res.send(result.acknowledged)
+        })
+
+
 
     }
     finally {
