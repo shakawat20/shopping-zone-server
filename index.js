@@ -117,9 +117,7 @@ async function run() {
 
         })
         app.get('/orders',async(req,res)=>{
-
             const orders=await orderCollection.find().toArray()
-
             res.send(orders)
 
         })
@@ -128,7 +126,6 @@ async function run() {
         app.delete('/product/:id', async (req, res) => {
             const id = req?.params?.id;
             const product = { _id: new ObjectId(id) };
-            console.log(product)
             const result = await productsCollection.deleteOne(product);
             console.log(result)
             res.send(result)
